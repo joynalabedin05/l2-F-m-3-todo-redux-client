@@ -8,6 +8,15 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectLabel,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useAddTodosMutation } from "@/redux/api/api";
@@ -16,8 +25,9 @@ import { useAddTodosMutation } from "@/redux/api/api";
 import { FormEvent, useState } from "react";
 
 const AddToDoModal = () => {
-  const [task,setTask] = useState('')
-  const [description,setDescription] = useState('')
+  const [task,setTask] = useState('');
+  const [description,setDescription] = useState('');
+  const [priority,setPriority] = useState('');
 
   //1. for local state maanagement
   // const dispatch = useAppDispatch();
@@ -37,8 +47,9 @@ const AddToDoModal = () => {
     const taskDetaills = {
       // id: randomString,
       title: task,
-      description: description,
-      // priority,
+      description,
+      priority,
+      isCompleted: false
     }
 
      // for local state maanagement
@@ -46,8 +57,10 @@ const AddToDoModal = () => {
 
     // for server state managenent
     addTodo(taskDetaills);
-
+    console.log('inside task',taskDetaills)
   }
+
+ 
     return (
         <Dialog>
       <DialogTrigger asChild>
@@ -72,6 +85,24 @@ const AddToDoModal = () => {
               Description
             </Label>
             <Input onBlur={(e)=>setDescription(e.target.value)} id="description"  className="col-span-3" />
+          </div>
+          <div className="grid grid-cols-4 items-center gap-4">
+            <Label className="text-right">
+              priority
+            </Label>
+            <Select onValueChange={(value)=>setPriority(value)}>
+              <SelectTrigger className="col-span-3">
+                <SelectValue placeholder="Select a fruit" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectLabel>Priority</SelectLabel>
+                  <SelectItem value="high">High</SelectItem>
+                  <SelectItem value="medium">Medium</SelectItem>
+                  <SelectItem value="low">Low</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
           </div>
           <div className="flex justify-end">
           <DialogClose  asChild>
